@@ -1,0 +1,281 @@
+/* 
+  COLOR PALETTE & RESET
+   */
+:root {
+  --bg-sky: #1b2149;           /* Deep midnight indigo */
+  --bg-deep: #11142e;          /* Darker space backdrop */
+  --moon-core: #b4c7dc;        /* Pale crater grey/blue */
+  --moon-glow: #6fa0c9;        /* Soft ambient moonlight */
+  --saucer-hull: #2c2f42;      /* Cozy cockpit charcoal */
+  --saucer-rim: #e76f9e;       /* UFO pastel pink */
+  --saucer-core: #b8dc5a;      /* Soft pastel beam yellow */
+  --beam-cyan: #72dbec;        /* Saucer dome / glow cyan */
+  --cat-cream: #fff3cb;        /* Warm kitty buttermilk cream */
+  --hud-frame: #3b4267;        /* Soft pixel border tone */
+  --hud-bg: rgba(22, 26, 54, 0.9); /* Translucent cockpit glass */
+  --text-muted: #8c97ba;       /* Soft readable grey-blue */
+
+  --font-pixel: 'Press Start 2P', monospace;
+  --font-sub: 'Silkscreen', monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* 
+   BODY: Centered vertical layout
+*/
+body {
+  min-height: 100vh;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at 50% 25%, var(--bg-sky) 0%, var(--bg-deep) 100%);
+  font-family: var(--font-pixel);
+  color: var(--cat-cream);
+  overflow-x: hidden;
+  position: relative;
+  padding: 1.5rem;
+}
+
+/* 
+   BACKGROUND: Fixed out-of-flow stars 
+*/
+.sky-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.pixel-stars {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(2px 2px at 20% 15%, var(--cat-cream) 100%, transparent),
+    radial-gradient(3px 3px at 80% 25%, #fff 100%, transparent),
+    radial-gradient(2px 2px at 15% 75%, var(--beam-cyan) 100%, transparent),
+    radial-gradient(2px 2px at 85% 80%, var(--cat-cream) 100%, transparent),
+    radial-gradient(3px 3px at 30% 85%, #fff 100%, transparent);
+  animation: starTwinkle 3s ease-in-out infinite alternate;
+}
+
+@keyframes starTwinkle {
+  0% { opacity: 0.6; }
+  100% { opacity: 1; }
+}
+
+/*
+    HUD CONTAINER: Strict vertical stack
+   */
+.cozy-hud {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 380px;
+  padding: 1.75rem 1.5rem;
+  background: var(--hud-bg);
+  backdrop-filter: blur(8px);
+  border-radius: 14px;
+
+  /* Stepped pixel shadow frame */
+  box-shadow: 
+    0 0 0 3px var(--hud-frame),
+    0 0 0 6px var(--bg-deep),
+    0 16px 32px rgba(0, 0, 0, 0.5);
+
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1.25rem;
+  text-align: center;
+}
+
+/* Top header ribbon */
+.hud-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--font-sub);
+  font-size: 0.75rem;
+  color: var(--beam-cyan);
+  letter-spacing: 1px;
+}
+
+.saucer-icon {
+  font-size: 1.1rem;
+  display: inline-block;
+  animation: gentleFloat 2.5s ease-in-out infinite alternate;
+}
+
+@keyframes gentleFloat {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-4px); }
+}
+
+
+/*sound toggle button*/
+
+.sound-toggle {
+  margin-left: auto;
+  font-size: 0.6rem;
+  padding: 0.25rem 0.5rem;
+  background: rgba(17, 20, 46, 0.6);
+  border-radius: 4px;
+  border: 1px solid var(--hud-frame);
+  opacity: 0.8;
+}
+
+.sound-toggle:hover {
+  opacity: 1;
+}
+
+.sound-toggle.playing {
+  color: var(--saucer-core);
+  border-color: var(--saucer-core);
+}
+
+/* 
+   MODE SELECTOR BAR
+  */
+.mode-selector {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.35rem;
+  background: rgba(17, 20, 46, 0.75);
+  padding: 0.35rem;
+  border-radius: 8px;
+  box-shadow: inset 0 0 0 2px var(--hud-frame);
+}
+
+.pixel-btn {
+  font-family: var(--font-sub);
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  color: var(--cat-cream);
+  user-select: none;
+  transition: all 0.1s ease;
+}
+
+.mode-btn {
+  flex: 1;
+  border-radius: 6px;
+  padding: 0.55rem 0.25rem;
+  font-size: 0.65rem;
+  text-align: center;
+  white-space: nowrap;
+  opacity: 0.65;
+}
+
+.mode-btn:hover {
+  opacity: 0.95;
+}
+
+.mode-btn.active {
+  opacity: 1;
+  background: var(--beam-cyan);
+  color: var(--bg-deep);
+  font-weight: 700;
+  box-shadow: 0 2px 0 #3fa6b6;
+}
+
+
+
+/*
+   TIMER DISPLAY
+   */
+.timer-display {
+  text-align: center;
+  padding: 1.25rem 0.5rem;
+  border-radius: 10px;
+  background: rgba(27, 33, 73, 0.4);
+  box-shadow: inset 0 0 0 2px rgba(114, 219, 236, 0.2);
+}
+
+#time-left {
+  font-size: clamp(2.3rem, 7.5vw, 3rem);
+  letter-spacing: 2px;
+  color: var(--cat-cream);
+  text-shadow: 0 0 16px rgba(255, 243, 203, 0.35);
+  margin-bottom: 0.5rem;
+}
+
+#current-mode-label {
+  font-family: var(--font-sub);
+  font-size: 0.72rem;
+  color: var(--saucer-rim);
+  letter-spacing: 1px;
+}
+
+/* 
+  ACTION BUTTON CONTROLS
+*/
+.timer-controls {
+  display: flex;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.action-btn {
+  flex: 1;
+  padding: 0.85rem 0.5rem;
+  font-family: var(--font-pixel);
+  font-size: 0.75rem;
+  border-radius: 8px;
+}
+
+.action-btn.primary {
+  background: var(--saucer-core);
+  color: var(--bg-deep);
+  box-shadow: 0 4px 0 #7e9c35;
+}
+
+.action-btn.primary:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #7e9c35;
+}
+
+.action-btn.secondary {
+  background: var(--hud-frame);
+  color: var(--cat-cream);
+  box-shadow: 0 4px 0 #252a42;
+}
+
+.action-btn.secondary:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #252a42;
+}
+
+/* 
+  FOOTER / PROGRESS TRACKER
+*/
+.session-tracker {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  font-family: var(--font-sub);
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  border-top: 2px dashed rgba(140, 151, 186, 0.25);
+  padding-top: 0.9rem;
+}
+
+.count-pill {
+  font-family: var(--font-pixel);
+  font-size: 0.75rem;
+  color: var(--saucer-rim);
+  background: rgba(231, 111, 158, 0.15);
+  padding: 0.35rem 0.65rem;
+  border-radius: 6px;
+}
